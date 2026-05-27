@@ -7,7 +7,7 @@
 [![NuGet](https://img.shields.io/nuget/vpre/LXGaming.Byparr?label=NuGet)](https://www.nuget.org/packages/LXGaming.Byparr)
 </div>
 
-**Byparr.NET** is an open source [.NET](https://dotnet.microsoft.com/) library for [Byparr](https://github.com/ThePhaseless/Byparr).
+**Byparr.NET** is an unofficial open source [.NET](https://dotnet.microsoft.com/) library for [Byparr](https://github.com/ThePhaseless/Byparr).
 
 ## Usage
 ### ByparrClient

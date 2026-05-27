@@ -12,7 +12,7 @@
     <Product>Byparr</Product>
     <Copyright>© Alex Thomson. All rights reserved.</Copyright>
     <Title>Byparr</Title>
-    <Description>Byparr Library for .NET</Description>
+    <Description>Unofficial Byparr Library for .NET</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/LXGaming/Byparr.NET</PackageProjectUrl>
     <PackageIcon>icon.png</PackageIcon>
