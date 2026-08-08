@@ -67,7 +67,6 @@ public class ByparrClientTest : IDisposable {
     }
 
     [TestCaseSource(nameof(Urls))]
-    [Order(3)]
     public async Task SendRequestGetCommandAsync(string url) {
         await _byparrClient.SendCommandAsync(new RequestGetCommand {
             Url = url
