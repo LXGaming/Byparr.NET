@@ -13,7 +13,7 @@
 ### ByparrClient
 ```csharp
 using var client = new ByparrClient(new ByparrClientOptions {
-    BaseAddress = new Uri("http://localhost:8191/")
+    Address = new Uri("http://localhost:8191/")
 });
 
 // For rawdogging Byparr, you're responsible for setting the appropriate properties.
