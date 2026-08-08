@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
@@ -23,21 +24,25 @@ public class ByparrClient : IDisposable {
     private readonly string? _apiKey;
     private bool _disposed;
 
-    public ByparrClient(ByparrClientOptions options) {
-        var handler = new SocketsHttpHandler();
-        try {
-            handler.AutomaticDecompression = options.AutomaticDecompression;
-            handler.PooledConnectionLifetime = options.PooledConnectionLifetime;
-            handler.Proxy = options.Proxy;
-            handler.UseCookies = false;
-        } catch (Exception) {
-            handler.Dispose();
-            throw;
+    public ByparrClient(ByparrClientOptions options, HttpClient? httpClient = null) {
+        if (httpClient == null) {
+            var handler = new SocketsHttpHandler();
+            try {
+                handler.AutomaticDecompression = DecompressionMethods.All;
+                handler.PooledConnectionLifetime = TimeSpan.FromMinutes(5);
+                handler.UseCookies = false;
+            } catch (Exception) {
+                handler.Dispose();
+                throw;
+            }
+
+            _httpClient = new HttpClient(handler);
+        } else {
+            _httpClient = httpClient;
         }
 
-        _httpClient = new HttpClient(handler);
         try {
-            _httpClient.BaseAddress = options.BaseAddress;
+            _httpClient.BaseAddress = options.Address;
             _httpClient.Timeout = options.Timeout;
             _httpClient.DefaultRequestHeaders.Add("User-Agent", Constants.Library.UserAgent);
 

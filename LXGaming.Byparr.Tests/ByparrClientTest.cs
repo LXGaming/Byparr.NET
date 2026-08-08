@@ -25,8 +25,8 @@ public class ByparrClientTest : IDisposable {
             .AddUserSecrets(typeof(ByparrClientTest).Assembly)
             .Build()
             .Get<ByparrClientOptions>();
-        if (options?.BaseAddress == null) {
-            Assert.Ignore("BaseAddress has not been configured for Byparr");
+        if (options?.Address == null) {
+            Assert.Ignore("Address has not been configured for Byparr");
         }
 
         _byparrClient = new TestByparrClient(options);
