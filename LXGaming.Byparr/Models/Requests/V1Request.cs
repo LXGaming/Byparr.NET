@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace LXGaming.Byparr.Models.Requests;
 
-// https://github.com/ThePhaseless/Byparr/blob/ceef2d66bfd24d8014a5392d5622671584fa9162/src/models.py#L14
+// https://github.com/ThePhaseless/Byparr/blob/77020bec0d3fab29975a3b05a7c9a3dc29960a17/src/models.py#L16
 public record V1Request {
 
     [JsonPropertyName("cmd")]
@@ -13,4 +13,10 @@ public record V1Request {
 
     [JsonPropertyName("maxTimeout")]
     public int? MaxTimeout { get; init; }
+
+    [JsonPropertyName("blockMedia")]
+    public bool? BlockMedia { get; init; }
+
+    [JsonPropertyName("returnOnlyCookies")]
+    public bool? ReturnOnlyCookies { get; init; }
 }

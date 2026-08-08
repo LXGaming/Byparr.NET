@@ -41,7 +41,21 @@ public class ByparrClientTest : IDisposable {
     }
 
     [TestCaseSource(nameof(Urls))]
-    public async Task SendAsync(string url) {
+    public async Task SendLoadAsync(string url) {
+        using var _ = Assert.EnterMultipleScope();
+        var responses = await _byparrClient.SendAsync(new LoadRequest {
+            Urls = [url]
+        });
+        Assert.That(responses, Has.Length.EqualTo(1));
+
+        var response = responses.Single();
+        Assert.That(response.PageContent, Is.Not.Null);
+        Assert.That(response.Metadata, Is.Not.Empty);
+        Assert.That(response.GetSource(), Is.EqualTo(url));
+    }
+
+    [TestCaseSource(nameof(Urls))]
+    public async Task SendV1Async(string url) {
         var response = await _byparrClient.SendAsync(new V1Request {
             Command = Command.RequestGet,
             Url = url

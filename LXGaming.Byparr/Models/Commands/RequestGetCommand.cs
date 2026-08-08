@@ -10,11 +10,17 @@ public record RequestGetCommand : CommandBase {
 
     public TimeSpan? MaxTimeout { get; init; }
 
+    public bool? BlockMedia { get; init; }
+
+    public bool? ReturnOnlyCookies { get; init; }
+
     public override V1Request ToV1Request() {
         return new V1Request {
             Command = Command,
             Url = Url,
-            MaxTimeout = (int?) MaxTimeout?.TotalMilliseconds
+            MaxTimeout = (int?) MaxTimeout?.TotalMilliseconds,
+            BlockMedia = BlockMedia,
+            ReturnOnlyCookies = ReturnOnlyCookies
         };
     }
 }

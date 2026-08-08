@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace LXGaming.Byparr.Models;
 
-// https://github.com/ThePhaseless/Byparr/blob/ceef2d66bfd24d8014a5392d5622671584fa9162/src/models.py#L33
+// https://github.com/ThePhaseless/Byparr/blob/77020bec0d3fab29975a3b05a7c9a3dc29960a17/src/models.py#L60
 public record Solution {
 
     [JsonPropertyName("url")]
@@ -24,4 +24,10 @@ public record Solution {
 
     [JsonPropertyName("response")]
     public required string Response { get; init; }
+
+    /// <remarks>
+    /// Added in 3.0.0
+    /// </remarks>
+    [JsonPropertyName("contentType")]
+    public string? ContentType { get; init; }
 }

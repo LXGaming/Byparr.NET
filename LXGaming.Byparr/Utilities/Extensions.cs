@@ -10,6 +10,10 @@ public static class Extensions {
         return string.Equals(response.Message, HealthResponse.WorkingMessage);
     }
 
+    public static string? GetSource(this LoadResponse response) {
+        return response.Metadata.GetValueOrDefault("source");
+    }
+
     public static V1Response EnsureSuccessStatus(this V1Response response) {
         if (!response.IsSuccessStatus()) {
             throw new HttpRequestException(response.Message, null, HttpStatusCode.InternalServerError);

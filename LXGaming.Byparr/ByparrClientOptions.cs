@@ -9,6 +9,8 @@ public sealed class ByparrClientOptions {
 
     public required Uri BaseAddress { get; set; }
 
+    public string? ApiKey { get; set; }
+
     public Dictionary<string, string>? AdditionalHeaders { get; set; }
 
     public DecompressionMethods AutomaticDecompression { get; set; } = DecompressionMethods.All;

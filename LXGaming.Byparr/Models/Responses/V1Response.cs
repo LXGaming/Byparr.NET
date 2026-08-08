@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace LXGaming.Byparr.Models.Responses;
 
-// https://github.com/ThePhaseless/Byparr/blob/ceef2d66bfd24d8014a5392d5622671584fa9162/src/models.py#L43
+// https://github.com/ThePhaseless/Byparr/blob/77020bec0d3fab29975a3b05a7c9a3dc29960a17/src/models.py#L71
 public record V1Response {
 
     [JsonPropertyName("status")]

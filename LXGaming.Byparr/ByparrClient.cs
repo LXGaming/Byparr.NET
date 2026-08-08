@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
@@ -18,6 +20,7 @@ public class ByparrClient : IDisposable {
     protected JsonSerializerOptions JsonSerializerOptions { get; }
 
     private readonly HttpClient _httpClient;
+    private readonly string? _apiKey;
     private bool _disposed;
 
     public ByparrClient(ByparrClientOptions options) {
@@ -48,6 +51,8 @@ public class ByparrClient : IDisposable {
             throw;
         }
 
+        _apiKey = options.ApiKey;
+
         JsonSerializerOptions = new JsonSerializerOptions {
             Converters = {
                 new FrozenDictionaryConverterFactory()
@@ -65,6 +70,17 @@ public class ByparrClient : IDisposable {
         using var response = await SendAsync(request, proxy, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         return await DeserializeAsync<HealthResponse>(response, cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<ImmutableArray<LoadResponse>> SendAsync(LoadRequest loadRequest, Proxy? proxy = null,
+        CancellationToken cancellationToken = default) {
+        var content = JsonSerializer.Serialize(loadRequest, JsonSerializerOptions);
+        using var request = new HttpRequestMessage(HttpMethod.Post, "load");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+        request.Content = new StringContent(content, Encoding.UTF8, MediaTypeNames.Application.Json);
+        using var response = await SendAsync(request, proxy, cancellationToken).ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
+        return await DeserializeAsync<ImmutableArray<LoadResponse>>(response, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<V1Response> SendAsync(V1Request v1Request, Proxy? proxy = null,
