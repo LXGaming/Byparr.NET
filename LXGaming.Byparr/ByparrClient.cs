@@ -73,7 +73,6 @@ public class ByparrClient : IDisposable {
         CancellationToken cancellationToken = default) {
         using var request = new HttpRequestMessage(HttpMethod.Get, "health");
         using var response = await SendAsync(request, proxy, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
         return await DeserializeAsync<HealthResponse>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -84,7 +83,6 @@ public class ByparrClient : IDisposable {
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
         request.Content = new StringContent(content, Encoding.UTF8, MediaTypeNames.Application.Json);
         using var response = await SendAsync(request, proxy, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
         return await DeserializeAsync<ImmutableArray<LoadResponse>>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -111,7 +109,7 @@ public class ByparrClient : IDisposable {
             .ConfigureAwait(false) ?? throw new JsonException($"Failed to deserialize {typeof(T).Name}.");
     }
 
-    protected virtual Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, Proxy? proxy,
+    protected virtual async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, Proxy? proxy,
         CancellationToken cancellationToken = default) {
         if (proxy != null) {
             request.Headers.Add("X-Proxy-Server", proxy.Server);
@@ -124,7 +122,25 @@ public class ByparrClient : IDisposable {
             }
         }
 
-        return _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
+            .ConfigureAwait(false);
+        if (response.IsSuccessStatusCode) {
+            return response;
+        }
+
+        try {
+            string message;
+            if (string.Equals(response.Content.Headers.ContentType?.MediaType, MediaTypeNames.Application.Json)) {
+                var error = await DeserializeAsync<ErrorResponse>(response, cancellationToken).ConfigureAwait(false);
+                message = error.Detail;
+            } else {
+                message = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            throw new HttpRequestException(message, null, response.StatusCode);
+        } finally {
+            response.Dispose();
+        }
     }
 
     public void Dispose() {
