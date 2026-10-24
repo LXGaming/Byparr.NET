@@ -28,7 +28,8 @@ public class ByparrClient : IDisposable {
         if (httpClient == null) {
             var handler = new SocketsHttpHandler();
             try {
-                handler.AutomaticDecompression = DecompressionMethods.All;
+                // CVE-2026-111497 (Brotli out-of-bounds write)
+                handler.AutomaticDecompression = DecompressionMethods.All & ~DecompressionMethods.Brotli;
                 handler.PooledConnectionLifetime = TimeSpan.FromMinutes(5);
                 handler.UseCookies = false;
             } catch (Exception) {
