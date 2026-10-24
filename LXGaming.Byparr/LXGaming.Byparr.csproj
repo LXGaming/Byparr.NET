@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LXGaming.Common" Version="1.11.9" />
+    <PackageReference Include="LXGaming.Common" Version="1.11.10" />
   </ItemGroup>
 
 </Project>
