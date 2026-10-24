@@ -70,7 +70,7 @@ public class ByparrClientTest : IDisposable {
             Assert.That(response.Solution, Is.Not.Null);
             Assert.That(response.IsSuccessStatus(), Is.True);
         } else {
-            Assert.ThrowsAsync<HttpRequestException>(() => task);
+            await Assert.ThrowsAsync<HttpRequestException>(() => task);
         }
     }
 
@@ -84,7 +84,7 @@ public class ByparrClientTest : IDisposable {
             var solution = await task;
             Assert.That(solution.IsSuccessStatus(), Is.True);
         } else {
-            Assert.ThrowsAsync<HttpRequestException>(() => task);
+            await Assert.ThrowsAsync<HttpRequestException>(() => task);
         }
     }
 
